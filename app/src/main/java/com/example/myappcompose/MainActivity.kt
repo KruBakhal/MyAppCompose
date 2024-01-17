@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -19,8 +20,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -74,7 +78,32 @@ class MainActivity : ComponentActivity() {
 @Preview(showBackground = true)
 @Composable
 private fun MyApp() {
-    SimpleEditTextButtonSnackbar()
+
+    // this lazy column will load rest item on scroll i.e lazy loading on scroll
+    LazyColumn(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        items(5) { key ->
+            ItemCardView(key)
+        }
+    }
+
+    // load all item in starr
+    /*
+     val scrollState = rememberScrollState()
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(scrollState),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        for (i in 1..20) {
+            ItemCardView(i)
+        }
+    }*/
+
+
 }
 
 fun showToast(context: Context, msg: String) {
@@ -104,7 +133,8 @@ fun SimpleEditTextButtonSnackbar() {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            TextField(value = textValue,
+            TextField(
+                value = textValue,
                 label = {
                     Text(text = "Enter Text")
                 },
@@ -239,7 +269,9 @@ fun ItemCardView(i: Int) {
             .padding(10.dp), shape = RoundedCornerShape(20.dp)
     ) {
         Box(
-            modifier = Modifier.height(200.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(200.dp)
         ) {
             Image(
                 painterResource(id = R.drawable.sample),
