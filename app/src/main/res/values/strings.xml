@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">MyAppCompose</string>
+    <string name="app_name">Shop Products</string>
+    <string name="title_activity_main">MainActivity</string>
 </resources>
