@@ -60,6 +60,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ChainStyle
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
+import com.example.myappcompose.ui.theme.fontFamily
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
@@ -76,7 +77,7 @@ class PracticesActivity : ComponentActivity() {
 @Composable
 private fun MyApp() {
 
-
+    ConstraintLayoutDemo()
 }
 
 @Composable
@@ -262,15 +263,7 @@ fun BoxItem(modifier: Modifier = Modifier, colorState: (Color) -> Unit) {
 
 @Composable
 fun StylingTextExample() {
-    val fontFamily = FontFamily(
-        Font(R.font.mukta_light, FontWeight.Light),
-        Font(R.font.mukta_medium, FontWeight.Medium),
-        Font(R.font.mukta_regular, FontWeight.Normal),
-        Font(R.font.mukta_semibold, FontWeight.SemiBold),
-        Font(R.font.mukta_extralight, FontWeight.ExtraLight),
-        Font(R.font.mukta_bold, FontWeight.Bold),
-        Font(R.font.mukta_extrabold, FontWeight.ExtraBold),
-    )
+
     Text(
         text = buildAnnotatedString {
             withStyle(

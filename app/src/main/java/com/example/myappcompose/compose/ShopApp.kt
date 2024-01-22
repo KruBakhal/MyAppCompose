@@ -2,6 +2,7 @@ package com.example.myappcompose.compose
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.ShareCompat
@@ -9,8 +10,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.example.CategoryList
+import com.example.example.ProductModel
 import com.example.myappcompose.R
 import com.example.myappcompose.utils.Screen
+import com.google.gson.Gson
 
 @Composable
 fun ShopApp() {
@@ -26,44 +30,51 @@ fun SunFlowerNavHost(
 ) {
     val activity = (LocalContext.current as Activity)
     NavHost(navController = navController, startDestination = Screen.Home.route) {
-        composable(route = Screen.Home.route) {
-            HomeScreen(
-                onClick = {
-                    /*navController.navigate(
-                         Screen.PlantDetail.createRoute(
-                             plantId = it.plantId
-                         )
-                    )*/
-                }
-            )
+        composable(route = Screen.Home.route, arguments = Screen.Home.navArguments) {
+            HomeScreen {
+                navController.navigate(
+                    Screen.Home.createRouteToProduct(
+                        category = Uri.encode(Gson().toJson(it))
+                    )
+                )
+            }
         }
         composable(
-            route = Screen.Gallery.route,
-            arguments = Screen.Gallery.navArguments
+            route = Screen.ProductList.route,
+            arguments = Screen.ProductList.navArguments
         ) {
-            ProductScreen(
-                onClick = {
+            val json = it.arguments?.getString("category")
+            val productListObject = if (!json.isNullOrEmpty()) {
+                Gson().fromJson(json, CategoryList::class.java)
+            } else {
+                CategoryList()
+            }
 
-                }
-            )
+            ProductScreen(productListObject, onBackClick = {
+                navController.navigateUp()
+            }) {
+                navController.navigate(
+                    Screen.ProductList.createRouteToDetail(
+                        detail = Uri.encode(Gson().toJson(it))
+                    )
+                )
+            }
         }
         composable(
-            route = Screen.PlantDetail.route,
-            arguments = Screen.PlantDetail.navArguments
+            route = Screen.ProductDetail.route,
+            arguments = Screen.ProductDetail.navArguments
         ) {
-            DetailScreen(
-                /* onBackClick = { navController.navigateUp() },
-                 onShareClick = {
-                     createShareIntent(activity, it)
-                 },
-                 onGalleryClick = {
-                     navController.navigate(
-                         Screen.Gallery.createRoute(
-                             plantName = it.name
-                         )
-                     )
-                 }*/
-            )
+            val json = it.arguments?.getString("detail")
+            val product = if (!json.isNullOrEmpty()) {
+                Gson().fromJson(json, ProductModel::class.java)
+            } else {
+                ProductModel()
+            }
+            DetailScreen(product,
+                onBackClick = { navController.navigateUp() }
+            ) {
+                createShareIntent(activity, it)
+            }
         }
 
     }
@@ -71,13 +82,12 @@ fun SunFlowerNavHost(
 
 // Helper function for calling a share functionality.
 // Should be used when user presses a share button/menu item.
-/*
 private fun createShareIntent(activity: Activity, plantName: String) {
-    val shareText = activity.getString(R.string.share_text_plant, plantName)
+    val shareText = activity.getString(R.string.app_name).toString() + " $plantName"
     val shareIntent = ShareCompat.IntentBuilder(activity)
         .setText(shareText)
         .setType("text/plain")
         .createChooserIntent()
         .addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT or Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
     activity.startActivity(shareIntent)
-}*/
+}

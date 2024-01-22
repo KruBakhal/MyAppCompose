@@ -1,8 +1,10 @@
 package com.example.myappcompose.di.module
 
+import com.example.myappcompose.di.network.APINetworkInterface
 import com.example.myappcompose.utils.Constants
 import com.google.gson.GsonBuilder
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
@@ -16,7 +18,8 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class NetworkModule {
 
-
+    @Provides
+    @Singleton
     fun provideRetrofit(): Retrofit {
         val okHttpClientForMoreAppsView: OkHttpClient = OkHttpClient.Builder()
             .callTimeout(8, TimeUnit.SECONDS)
@@ -33,6 +36,13 @@ class NetworkModule {
             .build()
 
     }
+
+    @Provides
+    @Singleton
+    fun provideRetrofitService(retrofit: Retrofit): APINetworkInterface {
+        return retrofit.create(APINetworkInterface::class.java)
+    }
+
 
     fun provideOkHttpClient(interceptor: HttpLoggingInterceptor): OkHttpClient {
         val b = OkHttpClient.Builder()

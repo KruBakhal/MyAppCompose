@@ -1,109 +1,136 @@
 package com.example.myappcompose.compose
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.example.CategoryList
 import com.example.myappcompose.R
-import com.example.myappcompose.viewmodel.BrandViewModel
+import com.example.myappcompose.ui.theme.PrimaryColor
+import com.example.myappcompose.ui.theme.TertiaryColor
+import com.example.myappcompose.ui.theme.fontFamily
+import com.example.myappcompose.viewmodel.CategoryViewModel
 
-
-@Composable
-fun HomeScreen(
-    onClick: () -> Unit
-) {
-    val viewModel: BrandViewModel = hiltViewModel()
-    MainScreen()
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen() {
+
+fun HomeScreen(onClick: (CategoryList) -> Unit) {
+
     Scaffold(
         modifier = Modifier,
         topBar = {
             HomeTopAppBar()
         }
     ) { contentPadding ->
-        HomeBelowPart(contentPadding.calculateTopPadding())
+        HomeBelowPart(contentPadding.calculateTopPadding(), onClick)
     }
 }
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun HomeTopAppBar(modifier: Modifier = Modifier) {
+private fun HomeTopAppBar() {
     CenterAlignedTopAppBar(
         title = {
-            Row(
-                Modifier
-                    .fillMaxWidth()
-                    .background(Color.Black),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    color = Color.White,
-                    text = stringResource(id = R.string.app_name),
-                    style = MaterialTheme.typography.displaySmall
-                )
-            }
+            Text(
+                text = stringResource(id = R.string.app_name),
+                fontSize = TextUnit(26f, TextUnitType.Sp),
+                fontFamily = fontFamily,
+                fontWeight = FontWeight.Bold,
+            )
         },
-        modifier = modifier.background(Color.Black)
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+            containerColor = TertiaryColor,
+            titleContentColor = PrimaryColor
+        )
     )
 }
 
 
 @Composable
-fun HomeBelowPart(padding: Dp) {
-
-    val list = mutableListOf<String>("asda", "sds", "asda", "sds")
-
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        verticalArrangement = Arrangement.Top,
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(padding)
-
-    ) {
-        items(list.size) {
-            Box(
+fun HomeBelowPart(padding: Dp, onClick: (CategoryList) -> Unit) {
+    val viewModel: CategoryViewModel = hiltViewModel()
+    val list = viewModel.categoryList.collectAsState()
+    if (list.value.isNullOrEmpty()) {
+        Box(
+            modifier = Modifier.fillMaxSize(1f),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "Loading...", color = TertiaryColor,
+                textAlign = TextAlign.Center,
+                fontFamily = fontFamily,
+                fontWeight = FontWeight.SemiBold,
                 modifier = Modifier
-                    .size(200.dp)
-                    .padding(8.dp)
-                    .clip(RoundedCornerShape(10.dp))
-                    .background(Color.Black),
-                contentAlignment = Alignment.BottomCenter
-            ) {
-                Text(
-                    text = "$it", color = Color.White,
-                    textAlign = TextAlign.Center,
+                    .fillMaxWidth()
+                    .padding(8.dp, 20.dp)
+            )
+        }
+    } else {
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            verticalArrangement = Arrangement.Top,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = padding)
+
+        ) {
+            items(list.value.distinctBy { it.categoryName }) {
+                Box(
                     modifier = Modifier
-                        .fillMaxWidth()
+                        .width(200.dp)
+                        .height(130.dp)
                         .padding(8.dp)
-                )
+                        .clip(RoundedCornerShape(10.dp))
+                        .paint(
+                            painter
+                            = painterResource(id = R.drawable.bg_category),
+                            contentScale = ContentScale.Crop
+                        )
+                        .clickable {
+                            onClick.invoke(it)
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "${it.categoryName}", color = Color.White,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp, 20.dp)
+                    )
+                }
             }
         }
     }

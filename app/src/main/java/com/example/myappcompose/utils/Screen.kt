@@ -5,27 +5,35 @@ import androidx.navigation.NavType
 import androidx.navigation.navArgument
 
 sealed class Screen(
-    val route: String,
-    val navArguments: List<NamedNavArgument> = emptyList()
+    val route: String, val navArguments: List<NamedNavArgument> = emptyList()
 ) {
-     object Home : Screen("home")
 
-     object PlantDetail : Screen(
-        route = "plantDetail/{plantId}",
-        navArguments = listOf(navArgument("plantId") {
+    object ProductDetail : Screen(
+        route = "productdetail/{detail}",
+        navArguments = listOf(navArgument("detail") {
             type = NavType.StringType
         })
     ) {
-        fun createRoute(plantId: String) = "plantDetail/${plantId}"
+
     }
 
-    object Gallery : Screen(
-        route = "gallery/{plantName}",
-        navArguments = listOf(navArgument("plantName") {
+    object ProductList : Screen(
+        route = "productlist/{category}",
+        listOf(navArgument("category") {
             type = NavType.StringType
         })
     ) {
-        fun createRoute(plantName: String) = "gallery/${plantName}"
+        fun createRouteToDetail(detail: String) = "productdetail/${detail}"
 
     }
+
+
+    object Home : Screen(
+        route = "home"
+    ) {
+        fun createRouteToProduct(category: String) = "productlist/${category}"
+
+    }
+
+
 }

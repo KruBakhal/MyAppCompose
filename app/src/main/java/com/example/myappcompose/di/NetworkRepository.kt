@@ -1,8 +1,7 @@
 package com.example.myappcompose.di
 
-import com.example.example.AppBrandData
+import androidx.lifecycle.SavedStateHandle
 import com.example.example.CategoryList
-import com.example.example.ProductList
 import com.example.myappcompose.data.ErrorResponse
 import com.example.myappcompose.data.Response
 import com.example.myappcompose.data.SuccessResponse
@@ -12,9 +11,10 @@ import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
 
-class NetworkRepository @Inject constructor(val apiNetworkInterface: APINetworkInterface) {
-
-
+class NetworkRepository @Inject constructor(
+    val apiNetworkInterface: APINetworkInterface,
+    private val savedStateHandle: SavedStateHandle
+) {
     val _categoryList = MutableStateFlow<List<CategoryList>>(emptyList())
     val categoryList: StateFlow<List<CategoryList>> get() = _categoryList
 
@@ -22,7 +22,7 @@ class NetworkRepository @Inject constructor(val apiNetworkInterface: APINetworkI
     suspend fun getData(): Response<List<CategoryList>> {
         return try {
             val response = apiNetworkInterface.getData()
-
+            _categoryList.value = response
             SuccessResponse(response)
         } catch (ee: Exception) {
             ErrorResponse("", ee)

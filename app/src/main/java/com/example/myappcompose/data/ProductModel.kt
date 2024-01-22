@@ -3,7 +3,7 @@ package com.example.example
 import com.google.gson.annotations.SerializedName
 
 
-data class ProductList (
+data class ProductModel (
 
   @SerializedName("available_qty" ) var availableQty : String? = null,
   @SerializedName("cart_image"    ) var cartImage    : String? = null,
