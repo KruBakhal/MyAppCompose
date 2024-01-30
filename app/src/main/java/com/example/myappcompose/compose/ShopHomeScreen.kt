@@ -1,5 +1,6 @@
 package com.example.myappcompose.compose
 
+import android.content.res.Configuration
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,6 +26,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -45,7 +47,7 @@ import com.example.myappcompose.viewmodel.CategoryViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 
-fun HomeScreen(onClick: (CategoryList) -> Unit) {
+fun ShopHomeScreen(onClick: (CategoryList) -> Unit) {
 
     Scaffold(
         modifier = Modifier,
@@ -80,6 +82,8 @@ private fun HomeTopAppBar() {
 
 @Composable
 fun HomeBelowPart(padding: Dp, onClick: (CategoryList) -> Unit) {
+    val configuration = LocalConfiguration.current
+    val isLandscape = (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) ?: false
     val viewModel: CategoryViewModel = hiltViewModel()
     val list = viewModel.categoryList.collectAsState()
     if (list.value.isNullOrEmpty()) {
@@ -98,8 +102,12 @@ fun HomeBelowPart(padding: Dp, onClick: (CategoryList) -> Unit) {
             )
         }
     } else {
+        var spanCount = 2
+        if (isLandscape) {
+            spanCount = 3
+        }
         LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
+            columns = GridCells.Fixed(spanCount),
             verticalArrangement = Arrangement.Top,
             modifier = Modifier
                 .fillMaxSize()
@@ -124,8 +132,8 @@ fun HomeBelowPart(padding: Dp, onClick: (CategoryList) -> Unit) {
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "${it.categoryName}", color = Color.White,
-                        textAlign = TextAlign.Center,
+                        text = "${capitalizeFirstLetter(it.categoryName?.replace("-", " "))}",
+                        color = Color.White, textAlign = TextAlign.Center,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(8.dp, 20.dp)
@@ -134,4 +142,10 @@ fun HomeBelowPart(padding: Dp, onClick: (CategoryList) -> Unit) {
             }
         }
     }
+
+
+}
+
+private fun capitalizeFirstLetter(text: String?): String {
+    return text?.substring(0, 1)?.uppercase() + text?.substring(1)?.lowercase()
 }

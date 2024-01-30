@@ -13,15 +13,18 @@ import androidx.navigation.compose.rememberNavController
 import com.example.example.CategoryList
 import com.example.example.ProductModel
 import com.example.myappcompose.R
+import com.example.myappcompose.ui.theme.MyAppComposeTheme
 import com.example.myappcompose.utils.Screen
 import com.google.gson.Gson
 
 @Composable
 fun ShopApp() {
-    val navController = rememberNavController()
-    SunFlowerNavHost(
-        navController = navController
-    )
+    MyAppComposeTheme {
+        val navController = rememberNavController()
+        SunFlowerNavHost(
+            navController = navController
+        )
+    }
 }
 
 @Composable
@@ -31,7 +34,7 @@ fun SunFlowerNavHost(
     val activity = (LocalContext.current as Activity)
     NavHost(navController = navController, startDestination = Screen.Home.route) {
         composable(route = Screen.Home.route, arguments = Screen.Home.navArguments) {
-            HomeScreen {
+            ShopHomeScreen {
                 navController.navigate(
                     Screen.Home.createRouteToProduct(
                         category = Uri.encode(Gson().toJson(it))

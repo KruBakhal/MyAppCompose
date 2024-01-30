@@ -1,6 +1,8 @@
 package com.example.myappcompose.compose
 
+import android.content.res.ColorStateList
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,17 +11,24 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -38,6 +47,7 @@ import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import com.example.example.ProductModel
 import com.example.myappcompose.R
+import com.example.myappcompose.ui.theme.PrimaryColor
 import com.example.myappcompose.ui.theme.TertiaryColor
 import com.example.myappcompose.ui.theme.fontFamily
 import com.example.myappcompose.viewmodel.DetailViewModel
@@ -56,9 +66,7 @@ fun DetailScreen(product: ProductModel, onBackClick: () -> Unit, onShareClick: (
         ProductTopAppBar(onBackClick, viewModel.productModel.value?.name)
     }) { contentPadding ->
         DetailBelowPart(
-            contentPadding.calculateTopPadding(),
-            onShareClick,
-            viewModel.productModel.value
+            contentPadding.calculateTopPadding(), onShareClick, viewModel.productModel.value
         )
     }
 }
@@ -66,9 +74,7 @@ fun DetailScreen(product: ProductModel, onBackClick: () -> Unit, onShareClick: (
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun DetailBelowPart(
-    calculateTopPadding: Dp,
-    onShareClick: (String) -> Unit,
-    product: ProductModel?
+    calculateTopPadding: Dp, onShareClick: (String) -> Unit, product: ProductModel?
 ) {
     val state = rememberScrollState()
     LaunchedEffect(Unit) { state.animateScrollTo(100) }
@@ -84,17 +90,24 @@ fun DetailBelowPart(
         val constraintSet = ConstraintSet {
             val image = createRefFor("image")
             val head = createRefFor("head")
+            val visitPage = createRefFor("visitPage")
             val title = createRefFor("title")
             constrain(image) {
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
                 top.linkTo(parent.top, margin = 6.dp)
             }
-            constrain(head) {
+            constrain(visitPage) {
                 top.linkTo(image.bottom, margin = 15.dp)
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
             }
+            constrain(head) {
+                top.linkTo(visitPage.bottom, margin = 15.dp)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            }
+
             constrain(title) {
                 top.linkTo(head.bottom, margin = 20.dp)
                 bottom.linkTo(parent.bottom, margin = 15.dp)
@@ -123,38 +136,32 @@ fun DetailBelowPart(
                 failure = placeholder(R.drawable.baseline_refresh_24)
             )
 
-            Text(
-                text = "Detail:",
-                color = TertiaryColor,
-                textAlign = TextAlign.Start,
-                fontSize = TextUnit(24f, TextUnitType.Sp),
-                fontFamily = fontFamily,
-                fontWeight = FontWeight.SemiBold,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp, 0.dp)
-                    .layoutId("head")
-            )
+            Button(
+                colors = ButtonDefaults.buttonColors(containerColor = PrimaryColor), onClick = {
+                    product?.url?.let { onShareClick.invoke(it) }
+                }, modifier = Modifier
+                    .layoutId("visitPage")
+            ) {
 
-           /* Text(
-                text = "${product?.description}",
-                color = TertiaryColor,
-                textAlign = TextAlign.Start,
-                fontFamily = fontFamily,
-                fontWeight = FontWeight.Normal,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(8.dp, 0.dp)
-                    .layoutId("title")
-            )*/
-            AndroidView(
-                modifier   = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp, 0.dp)
-                    .layoutId("title"),
+                Text(
+                    text = "Visit Page",
+                    color = TertiaryColor,
+                    textAlign = TextAlign.Center,
+                    fontFamily = fontFamily,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
+            AndroidView(modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp, 0.dp)
+                .layoutId("title"),
                 factory = { MaterialTextView(it) },
-                update = { it.text = spannedText }
-            )
+                update = {
+                    it.text = spannedText
+                    it.setTextColor(
+                        PrimaryColor.toArgb()
+                    )
+                })
         }
     }
 }

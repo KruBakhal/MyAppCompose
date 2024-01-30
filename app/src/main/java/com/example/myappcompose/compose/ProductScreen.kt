@@ -1,5 +1,6 @@
 package com.example.myappcompose.compose
 
+import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -30,6 +31,7 @@ import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -115,9 +117,15 @@ fun ProductBelowPart(padding: Dp, onClick: (ProductModel) -> Unit, list: Categor
     if (list != null) {
         viewModel._categoryProductList.value = list
     }
+    val configuration = LocalConfiguration.current
+    val isLandscape = (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) ?: false
 
+    var spanCount = 2
+    if (isLandscape) {
+        spanCount = 3
+    }
     LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
+        columns = GridCells.Fixed(spanCount),
         verticalArrangement = Arrangement.Top,
         modifier = Modifier
             .fillMaxSize()
