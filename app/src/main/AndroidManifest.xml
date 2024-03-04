@@ -3,8 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
-        android:name=".App"
+        android:name=".shopapp.App"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -16,10 +17,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".AppMainActivity"
             android:exported="true"
-            android:label="@string/title_activity_main"
-            android:theme="@style/Theme.MyAppCompose">
+            android:theme="@style/Theme.MyAppCompat">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,12 +27,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".PracticesActivity"
+            android:name=".shopapp.MainActivity"
             android:exported="true"
             android:label="@string/title_activity_main"
-            android:theme="@style/Theme.MyAppCompose">
+            android:theme="@style/Theme.MyAppCompose" />
 
-        </activity>
+        <activity
+            android:name=".practice.PracticesActivity"
+            android:exported="true"
+            android:label="@string/title_activity_main"
+            android:theme="@style/Theme.MyAppCompose"></activity>
     </application>
 
 </manifest>
