@@ -2,5 +2,6 @@
 <resources>
 
     <style name="Theme.MyAppCompose" parent="android:Theme.Material.Light.NoActionBar" />
+
     <style name="Theme.MyAppCompat" parent="Theme.Material3.DayNight.NoActionBar" />
 </resources>

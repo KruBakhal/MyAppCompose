@@ -15,9 +15,20 @@
         android:text="Compose" />
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_super_ball"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SuperBall" />
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_practice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Practice" />
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_reslove_parking"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Resolve Parking" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

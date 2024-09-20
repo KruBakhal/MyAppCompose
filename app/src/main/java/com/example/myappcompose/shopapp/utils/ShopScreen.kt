@@ -4,11 +4,11 @@ import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 
-sealed class Screen(
+sealed class ShopScreen(
     val route: String, val navArguments: List<NamedNavArgument> = emptyList()
 ) {
 
-    object ProductDetail : Screen(
+    object ProductDetail : ShopScreen(
         route = "productdetail/{detail}",
         navArguments = listOf(navArgument("detail") {
             type = NavType.StringType
@@ -17,7 +17,7 @@ sealed class Screen(
 
     }
 
-    object ProductList : Screen(
+    object ProductList : ShopScreen(
         route = "productlist/{category}",
         listOf(navArgument("category") {
             type = NavType.StringType
@@ -28,7 +28,7 @@ sealed class Screen(
     }
 
 
-    object Home : Screen(
+    object Home : ShopScreen(
         route = "home"
     ) {
         fun createRouteToProduct(category: String) = "productlist/${category}"

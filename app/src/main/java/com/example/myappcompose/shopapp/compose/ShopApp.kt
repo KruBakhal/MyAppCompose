@@ -14,7 +14,7 @@ import com.example.example.CategoryList
 import com.example.example.ProductModel
 import com.example.myappcompose.R
 import com.example.myappcompose.ui.theme.MyAppComposeTheme
-import com.example.myappcompose.shopapp.utils.Screen
+import com.example.myappcompose.shopapp.utils.ShopScreen
 import com.google.gson.Gson
 
 @Composable
@@ -32,19 +32,19 @@ fun SunFlowerNavHost(
     navController: NavHostController
 ) {
     val activity = (LocalContext.current as Activity)
-    NavHost(navController = navController, startDestination = Screen.Home.route) {
-        composable(route = Screen.Home.route, arguments = Screen.Home.navArguments) {
+    NavHost(navController = navController, startDestination = ShopScreen.Home.route) {
+        composable(route = ShopScreen.Home.route, arguments = ShopScreen.Home.navArguments) {
             ShopHomeScreen {
                 navController.navigate(
-                    Screen.Home.createRouteToProduct(
+                    ShopScreen.Home.createRouteToProduct(
                         category = Uri.encode(Gson().toJson(it))
                     )
                 )
             }
         }
         composable(
-            route = Screen.ProductList.route,
-            arguments = Screen.ProductList.navArguments
+            route = ShopScreen.ProductList.route,
+            arguments = ShopScreen.ProductList.navArguments
         ) {
             val json = it.arguments?.getString("category")
             val productListObject = if (!json.isNullOrEmpty()) {
@@ -57,15 +57,15 @@ fun SunFlowerNavHost(
                 navController.navigateUp()
             }) {
                 navController.navigate(
-                    Screen.ProductList.createRouteToDetail(
+                    ShopScreen.ProductList.createRouteToDetail(
                         detail = Uri.encode(Gson().toJson(it))
                     )
                 )
             }
         }
         composable(
-            route = Screen.ProductDetail.route,
-            arguments = Screen.ProductDetail.navArguments
+            route = ShopScreen.ProductDetail.route,
+            arguments = ShopScreen.ProductDetail.navArguments
         ) {
             val json = it.arguments?.getString("detail")
             val product = if (!json.isNullOrEmpty()) {

@@ -1,11 +1,16 @@
-package com.example.myappcompose.shopapp.di.module
+package com.example.myappcompose.di_module
 
+import android.content.Context
+import androidx.room.Room
 import com.example.myappcompose.shopapp.di.network.APINetworkInterface
 import com.example.myappcompose.shopapp.utils.Constants
+import com.example.practicesession.superballgame.database.SuperBallAppDatabase
+import com.example.practicesession.superballgame.database.SuperBallDao
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -55,5 +60,19 @@ class NetworkModule {
         interceptor.level = HttpLoggingInterceptor.Level.BODY
         return interceptor
     }
+    @Provides
+    @Singleton
+    fun getRoomDatabaseSuper(@ApplicationContext context: Context): SuperBallAppDatabase {
+        return Room.databaseBuilder(
+            context.applicationContext,
+            SuperBallAppDatabase::class.java,
+            "super_db_compose.db").allowMainThreadQueries().fallbackToDestructiveMigration().build()
+    }
 
+
+    @Provides
+    @Singleton
+    fun provideChannelDaoSuper( appDatabase: SuperBallAppDatabase): SuperBallDao {
+        return appDatabase.getArticleDBDao()
+    }
 }

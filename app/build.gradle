@@ -83,7 +83,7 @@ dependencies {
 
 
     // Lifecycle
-    def lifecycle_version = "2.6.0-alpha05"
+    def lifecycle_version = "2.7.0"
     //viewmodel utils for compose
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version"
     //viewmodel
@@ -98,4 +98,9 @@ dependencies {
     //glide for image loading
     implementation 'com.github.bumptech.glide:compose:1.0.0-beta01'
 
+    //room db
+//Room
+    implementation("androidx.room:room-runtime:2.6.1")
+    kapt("androidx.room:room-compiler:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
 }

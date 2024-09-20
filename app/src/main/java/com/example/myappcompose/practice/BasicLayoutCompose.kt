@@ -125,7 +125,8 @@ private fun BottomBarNavigationPortrait(modifier: Modifier = Modifier) {
         }, selected = true, onClick = {})
         NavigationBarItem(icon = {
             Icon(
-                imageVector = Icons.Default.Person, contentDescription = ""
+                imageVector = Icons.Default.Person,
+                contentDescription = ""
             )
         }, label = {
             Text(text = stringResource(id = R.string.profile))
@@ -298,11 +299,11 @@ fun SearchBox(modifier: Modifier) {
                 imageVector = Icons.Default.Search, contentDescription = null
             )
         },
-        colors = TextFieldDefaults.textFieldColors(
+        colors = TextFieldDefaults.colors(
+            focusedIndicatorColor = MaterialTheme.colorScheme.surface,
             unfocusedIndicatorColor = MaterialTheme.colorScheme.surface,
-            unfocusedLabelColor = MaterialTheme.colorScheme.surface,
             focusedLabelColor = MaterialTheme.colorScheme.surface,
-            focusedIndicatorColor = MaterialTheme.colorScheme.surface
+            unfocusedLabelColor = MaterialTheme.colorScheme.surface,
         )
     )
 }
