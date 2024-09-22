@@ -7,7 +7,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -16,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -35,7 +38,8 @@ import com.example.myappcompose.resolve_parking.theme.white
 import com.example.myappcompose.ui.theme.fontFamily
 
 @Composable
-public fun TopBar(title: Int, receiptButton: Boolean = false, onClickBack: () -> Unit) {
+public fun TopBar(title: Int, receiptButton: Boolean = false,
+                  onClickBack: () -> Unit) {
     ConstraintLayout(
         modifier = Modifier
             .fillMaxWidth()
@@ -43,20 +47,21 @@ public fun TopBar(title: Int, receiptButton: Boolean = false, onClickBack: () ->
 
     ) {
         val (btnBack, layTitle, btnReceipt) = createRefs()
-        createHorizontalChain(
+       /* createHorizontalChain(
             btnBack,
             layTitle,
             btnReceipt,
             chainStyle = ChainStyle.SpreadInside
-        )
+        )*/
         Text(
             text = stringResource(id = title),
             modifier = Modifier
+                .padding(50.dp,0.dp)
                 .constrainAs(layTitle) {
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)
-                    start.linkTo(btnBack.start)
-                    end.linkTo(btnReceipt.start)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
                     width = Dimension.fillToConstraints
                 },
             textAlign = TextAlign.Center,
@@ -71,27 +76,12 @@ public fun TopBar(title: Int, receiptButton: Boolean = false, onClickBack: () ->
                 .size(50.dp)
                 .constrainAs(btnBack) {
                     start.linkTo(parent.start)
-                    end.linkTo(layTitle.start)
+//                    end.linkTo(layTitle.start)
                 },
             contentDescription = "",
             tint = Color.Black
         )
-        if (receiptButton)
-            Button(
-                onClick = {
-                    onClickBack.invoke()
-                },
-                modifier = Modifier
-                    .height(45.dp)
-                    .constrainAs(btnReceipt) {
-                        end.linkTo(parent.end)
-                    },
-                colors = ButtonDefaults.buttonColors(containerColor = green_regular)
-            ) {
-                Text(
-                    text =
-                    stringResource(id = R.string.receipt_btn), color = white
-                )
-            }
+
+
     }
 }
