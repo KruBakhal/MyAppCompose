@@ -4,7 +4,7 @@ import com.example.myappcompose.resolve_parking.utils.CommonUtil.handleServerErr
 import com.example.myappcompose.resolve_parking.data.models.ErrorResponse
 import com.example.myappcompose.resolve_parking.data.models.Response
 import com.example.myappcompose.resolve_parking.data.models.SuccessResponse
-import com.example.myappcompose.resolve_parking.data.api.ApiService
+import com.example.myappcompose.resolve_parking.data.api.ResolveParkingApiService
 import com.example.myappcompose.resolve_parking.data.models.CloseTicketRequest
 import com.example.myappcompose.resolve_parking.data.models.CloseTicketVehicleDetailModel
 import com.example.myappcompose.resolve_parking.data.models.EditVehicleDetailRequest
@@ -20,7 +20,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 
 
-class TicketHistoryRepository(private val apiService: ApiService) {
+class TicketHistoryRepository(private val apiService: ResolveParkingApiService) {
         suspend fun searchTicket(
         authToken: String,
         isOpen: Boolean?,

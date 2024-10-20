@@ -15,10 +15,12 @@ import com.example.myappcompose.resolve_parking.data.models.ForceEndShiftRequest
 import com.example.myappcompose.resolve_parking.data.models.ShiftResponse
 import com.example.myappcompose.resolve_parking.data.models.ShiftSummary
 import com.example.myappcompose.resolve_parking.data.models.VerifyPinResponse
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
-
-class ShiftViewModel(private val shiftRepository: ShiftRepository) : ViewModel() {
+import javax.inject.Inject
+@HiltViewModel
+class ShiftViewModel @Inject constructor(private val shiftRepository: ShiftRepository) : ViewModel() {
     private val _startShiftLiveData =
         MutableLiveData<ApiResponse<ShiftResponse>?>()
     val startShiftLiveData: LiveData<ApiResponse<ShiftResponse>?> get() = _startShiftLiveData

@@ -19,15 +19,12 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
@@ -40,27 +37,21 @@ import androidx.core.content.res.ResourcesCompat
 import com.example.myappcompose.R
 import com.example.myappcompose.resolve_parking.theme.button_regular
 import com.example.myappcompose.resolve_parking.theme.hint_color
-import com.example.myappcompose.resolve_parking.utils.Constants.DATE_TIME_FORMAT_E_MMM_DD_YYYY
-import com.example.myappcompose.resolve_parking.utils.Constants.TIMEZONEIDENTIFIER
+import com.example.myappcompose.resolve_parking.utils.ResolveParkingConstants.TIMEZONEIDENTIFIER
 import com.example.myappcompose.resolve_parking.utils.getTodayDate
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
-import java.util.TimeZone
 
 
-@Preview(showBackground = true)
 @Composable
-fun StartShiftScreen() {
+fun StartShiftScreen(function: () -> Unit) {
     Scaffold(
         modifier = Modifier.background(Color.White), containerColor = Color.White
     ) { contentPadding ->
-        StartShiftScreenContent(contentPadding.calculateTopPadding(), Modifier)
+        StartShiftScreenContent(contentPadding.calculateTopPadding(), Modifier, function)
     }
 }
 
 @Composable
-fun StartShiftScreenContent(contentPadding: Dp, modifier: Modifier) {
+fun StartShiftScreenContent(contentPadding: Dp, modifier: Modifier, function: () -> Unit) {
     val selectedDateTime = getTodayDate()
     Box(modifier = Modifier.fillMaxHeight()) {
         val constraintSet = ConstraintSet {
@@ -154,7 +145,7 @@ fun StartShiftScreenContent(contentPadding: Dp, modifier: Modifier) {
             }
             Button(
                 onClick = {
-
+                    function.invoke()
                 },
                 colors = ButtonDefaults.buttonColors(button_regular),
                 modifier = Modifier

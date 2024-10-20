@@ -1,6 +1,6 @@
 package com.example.myappcompose.resolve_parking.data.api
 
-import com.example.myappcompose.resolve_parking.utils.Constants.BASE_URL
+import com.example.myappcompose.resolve_parking.utils.ResolveParkingConstants.BASE_URL
 import com.example.myappcompose.resolve_parking.data.models.*
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
@@ -18,7 +18,7 @@ import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface ApiService {
+interface ResolveParkingApiService {
     // shift Api`s
     @POST("api/device/validate-pin/{deviceSerialNo}")
     suspend fun verifyPin(
@@ -172,24 +172,5 @@ interface ApiService {
         @Body requestModel: CrashDataRequestModel
     ): PayOnExitResponseModel
 
-    companion object {
-
-        fun create(): ApiService {
-            val b = OkHttpClient.Builder()
-            b.addInterceptor(provideLoggingInterceptor())
-            val retrofit = Retrofit.Builder().client(b.build())
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-
-            return retrofit.create(ApiService::class.java)
-        }
-
-        private fun provideLoggingInterceptor(): HttpLoggingInterceptor {
-            val interceptor = HttpLoggingInterceptor()
-            interceptor.level = HttpLoggingInterceptor.Level.BODY
-            return interceptor
-        }
-    }
 
 }

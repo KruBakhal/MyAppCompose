@@ -4,12 +4,12 @@ import com.example.myappcompose.resolve_parking.utils.CommonUtil.handleServerErr
 import com.example.myappcompose.resolve_parking.data.models.ErrorResponse
 import com.example.myappcompose.resolve_parking.data.models.Response
 import com.example.myappcompose.resolve_parking.data.models.SuccessResponse
-import com.example.myappcompose.resolve_parking.data.api.ApiService
+import com.example.myappcompose.resolve_parking.data.api.ResolveParkingApiService
 import com.example.myappcompose.resolve_parking.data.models.ReportDataSharedResponse
 import com.example.myappcompose.resolve_parking.data.models.ReportModel
 import com.example.myappcompose.resolve_parking.data.models.SplitShiftRequest
 
-class ReportRepository(private val apiService: ApiService) {
+class ReportRepository(private val apiService: ResolveParkingApiService) {
     suspend fun reportTicket(authToken: String): Response<ReportModel> {
         return try {
             val response = apiService.reportData(authToken)

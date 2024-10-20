@@ -1,7 +1,7 @@
 package com.example.myappcompose.resolve_parking.data.models
 
 import com.example.myappcompose.resolve_parking.utils.CommonUtil.toDateTimeToInputFormatString
-import com.example.myappcompose.resolve_parking.utils.Constants.TIME_FORMAT_HH_MM
+import com.example.myappcompose.resolve_parking.utils.ResolveParkingConstants.TIME_FORMAT_HH_MM
 import com.google.gson.annotations.SerializedName
 
 

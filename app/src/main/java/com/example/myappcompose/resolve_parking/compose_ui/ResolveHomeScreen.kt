@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,13 +17,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -42,12 +41,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.layout
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -69,36 +65,41 @@ import com.example.myappcompose.resolve_parking.theme.button_self_normal_color
 import com.example.myappcompose.resolve_parking.theme.control_box_outline
 import com.example.myappcompose.resolve_parking.theme.gray_color
 import com.example.myappcompose.resolve_parking.theme.green_regular
-import com.example.myappcompose.resolve_parking.theme.hint_color
 import com.example.myappcompose.resolve_parking.theme.red_regular
 import com.example.myappcompose.ui.theme.fontFamily
 
 
-@Preview(showBackground = true)
 @Composable
-fun HomeScreen() {
+fun ResolveHomeScreen(function: () -> Unit, ticketDetail: (String) -> Unit) {
     Scaffold(
         modifier = Modifier.background(Color.White), containerColor = Color.White
     ) { contentPadding ->
-        HomeScreenContent(contentPadding.calculateTopPadding(), Modifier)
+        HomeScreenContent(contentPadding.calculateTopPadding(), Modifier, function, ticketDetail)
     }
 }
 
 @Composable
-fun HomeScreenContent(contentPadding: Dp, modifier: Modifier) {
+fun HomeScreenContent(
+    contentPadding: Dp,
+    modifier: Modifier,
+    function: () -> Unit,
+    ticketDetail: (String) -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(contentPadding)
     ) {
-        MainNavigation()
+        MainNavigation(function = function, ticketDetail = ticketDetail)
     }
 }
 
 @Composable
 fun MainNavigation(
     navController: NavHostController = rememberNavController(),
-    drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
+    function: () -> Unit,
+    ticketDetail: (String) -> Unit
 ) {
     val parkingData = listOf<TicketData>(
         TicketData(
@@ -253,7 +254,7 @@ fun MainNavigation(
                             data.getTimeString(),
                             data.durationStr.toString(),
                             data.getPrice(),
-                            data.isPaymentRequired
+                            data.isPaymentRequired,ticketDetail
                         )
                         Divider(
                             modifier = Modifier.height(5.dp),
@@ -285,7 +286,7 @@ fun MainNavigation(
                 Spacer(modifier = Modifier.width(10.dp))
 
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = {function.invoke() },
                     modifier = Modifier
                         .weight(1f)
                         .height(45.dp),
@@ -320,14 +321,17 @@ fun MainNavigation(
 
 @Composable
 fun ParkingItem(
-    id: String, license: String, time: String, duration: String, cost: String, isActive: Boolean
+    id: String, license: String, time: String, duration: String, cost: String,
+    isActive: Boolean, function: (String) -> Unit
 ) {
     val backgroundColor =
         if (isActive) Color(0xFF00C853) else Color(0xFFD32F2F) // Green if active, red if not
 
     Card(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize().clickable {
+                function.invoke("")
+            },
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(5.dp),
         shape = RoundedCornerShape(8.dp),

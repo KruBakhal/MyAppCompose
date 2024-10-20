@@ -1,24 +1,24 @@
 package com.example.myappcompose.resolve_parking.utils
 
 import android.annotation.SuppressLint
-import com.example.myappcompose.resolve_parking.utils.Constants.AUTH_TOKEN_KEY
-import com.example.myappcompose.resolve_parking.utils.Constants.DATE_TIME_FORMAT_MMM_DD_YYYY
-import com.example.myappcompose.resolve_parking.utils.Constants.DEVICE_CONFIG_VALUE_KEY
-import com.example.myappcompose.resolve_parking.utils.Constants.DEVICE_SERIAL_NO_KEY
-import com.example.myappcompose.resolve_parking.utils.Constants.IS_CLOVER_DEVICE
-import com.example.myappcompose.resolve_parking.utils.Constants.IS_PAY_ON_EXIST
-import com.example.myappcompose.resolve_parking.utils.Constants.IS_SELF
-import com.example.myappcompose.resolve_parking.utils.Constants.IS_SHIFT_KEY
-import com.example.myappcompose.resolve_parking.utils.Constants.IS_VALLET
-import com.example.myappcompose.resolve_parking.utils.Constants.LAST_PRINTED_SERIAL_NO_KEY
-import com.example.myappcompose.resolve_parking.utils.Constants.LOGIN_DATE
-import com.example.myappcompose.resolve_parking.utils.Constants.QRContentTemplate
-import com.example.myappcompose.resolve_parking.utils.Constants.SHARED_PREFERENCES_NAME
-import com.example.myappcompose.resolve_parking.utils.Constants.SHIFT_ID_KEY
-import com.example.myappcompose.resolve_parking.utils.Constants.TICKET_LIST_KEY
-import com.example.myappcompose.resolve_parking.utils.Constants.TIMEZONEIDENTIFIER
-import com.example.myappcompose.resolve_parking.utils.Constants.UNKNOWN
-import com.example.myappcompose.resolve_parking.utils.Constants.ISTip
+import com.example.myappcompose.resolve_parking.utils.ResolveParkingConstants.AUTH_TOKEN_KEY
+import com.example.myappcompose.resolve_parking.utils.ResolveParkingConstants.DATE_TIME_FORMAT_MMM_DD_YYYY
+import com.example.myappcompose.resolve_parking.utils.ResolveParkingConstants.DEVICE_CONFIG_VALUE_KEY
+import com.example.myappcompose.resolve_parking.utils.ResolveParkingConstants.DEVICE_SERIAL_NO_KEY
+import com.example.myappcompose.resolve_parking.utils.ResolveParkingConstants.IS_CLOVER_DEVICE
+import com.example.myappcompose.resolve_parking.utils.ResolveParkingConstants.IS_PAY_ON_EXIST
+import com.example.myappcompose.resolve_parking.utils.ResolveParkingConstants.IS_SELF
+import com.example.myappcompose.resolve_parking.utils.ResolveParkingConstants.IS_SHIFT_KEY
+import com.example.myappcompose.resolve_parking.utils.ResolveParkingConstants.IS_VALLET
+import com.example.myappcompose.resolve_parking.utils.ResolveParkingConstants.LAST_PRINTED_SERIAL_NO_KEY
+import com.example.myappcompose.resolve_parking.utils.ResolveParkingConstants.LOGIN_DATE
+import com.example.myappcompose.resolve_parking.utils.ResolveParkingConstants.QRContentTemplate
+import com.example.myappcompose.resolve_parking.utils.ResolveParkingConstants.SHARED_PREFERENCES_NAME
+import com.example.myappcompose.resolve_parking.utils.ResolveParkingConstants.SHIFT_ID_KEY
+import com.example.myappcompose.resolve_parking.utils.ResolveParkingConstants.TICKET_LIST_KEY
+import com.example.myappcompose.resolve_parking.utils.ResolveParkingConstants.TIMEZONEIDENTIFIER
+import com.example.myappcompose.resolve_parking.utils.ResolveParkingConstants.UNKNOWN
+import com.example.myappcompose.resolve_parking.utils.ResolveParkingConstants.ISTip
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -340,7 +340,7 @@ object CommonUtil {
 
     fun String.toDateTimeToInputFormatString(inputFormat: String): String {
         return try {
-            val format = SimpleDateFormat(Constants.DATE_TIME_TIMEZONE_FORMAT, Locale.getDefault())
+            val format = SimpleDateFormat(ResolveParkingConstants.DATE_TIME_TIMEZONE_FORMAT, Locale.getDefault())
             val targetTimeZone = TimeZone.getTimeZone(TIMEZONEIDENTIFIER)
             format.timeZone = targetTimeZone
             val date: Date = format.parse(this)!!
@@ -356,7 +356,7 @@ object CommonUtil {
 
     fun String.toDateTimeToInputFormatTimeStamp(): Long {
         return try {
-            val format = SimpleDateFormat(Constants.DATE_TIME_TIMEZONE_FORMAT, Locale.getDefault())
+            val format = SimpleDateFormat(ResolveParkingConstants.DATE_TIME_TIMEZONE_FORMAT, Locale.getDefault())
             val targetTimeZone = TimeZone.getTimeZone(TIMEZONEIDENTIFIER)
             format.timeZone = targetTimeZone
             val date: Date = format.parse(this)!!
@@ -407,7 +407,7 @@ object CommonUtil {
 
     fun Long.convertTimeStampToTimeString(): String? {
         return try {
-            val format = SimpleDateFormat(Constants.TIME_FORMAT_HH_MM_SS, Locale.getDefault())
+            val format = SimpleDateFormat(ResolveParkingConstants.TIME_FORMAT_HH_MM_SS, Locale.getDefault())
             val targetTimeZone = TimeZone.getTimeZone(TIMEZONEIDENTIFIER)
             format.timeZone = targetTimeZone
             format.format(Date(this))
@@ -417,7 +417,7 @@ object CommonUtil {
     }
 
     fun Long.convertTimeStampToDateString(
-        inputFormat: String = Constants.DATE_TIME_TIMEZONE_FORMAT,
+        inputFormat: String = ResolveParkingConstants.DATE_TIME_TIMEZONE_FORMAT,
         timeZoneIdentifier: String = TIMEZONEIDENTIFIER
     ): String? {
         return try {
@@ -448,7 +448,7 @@ object CommonUtil {
     }
 
     fun addTimeStringAndDuration(timeString: String, durationString: String): String {
-        val sdf = SimpleDateFormat(Constants.DATE_TIME_TIMEZONE_FORMAT, Locale.getDefault())
+        val sdf = SimpleDateFormat(ResolveParkingConstants.DATE_TIME_TIMEZONE_FORMAT, Locale.getDefault())
         val targetTimeZone = TimeZone.getTimeZone(TIMEZONEIDENTIFIER)
         sdf.timeZone = targetTimeZone
         val calendar = Calendar.getInstance()
@@ -755,7 +755,7 @@ object CommonUtil {
         // Convert to the target time zone
         val targetDateTime = originalDateTime.withZoneSameInstant(targetZoneId)
         // Define the desired format
-        val formatter = DateTimeFormatter.ofPattern(Constants.DATE_TIME_TIMEZONE_FORMAT)
+        val formatter = DateTimeFormatter.ofPattern(ResolveParkingConstants.DATE_TIME_TIMEZONE_FORMAT)
         // Format the converted timestamp
         return targetDateTime.format(formatter)
     }
@@ -806,7 +806,7 @@ object CommonUtil {
     }
 
     fun String.toMilliseconds(): Long {
-        val inputFormat = SimpleDateFormat(Constants.DATE_TIME_TIMEZONE_FORMAT, Locale.getDefault())
+        val inputFormat = SimpleDateFormat(ResolveParkingConstants.DATE_TIME_TIMEZONE_FORMAT, Locale.getDefault())
         val targetTimeZone = TimeZone.getTimeZone(TIMEZONEIDENTIFIER)
         inputFormat.timeZone = targetTimeZone
         return try {
@@ -842,7 +842,7 @@ object CommonUtil {
     }
 }
 fun getTodayDate(): String {
-    val sdf = SimpleDateFormat(Constants.DATE_TIME_FORMAT_E_MMM_DD_YYYY, Locale.getDefault())
+    val sdf = SimpleDateFormat(ResolveParkingConstants.DATE_TIME_FORMAT_E_MMM_DD_YYYY, Locale.getDefault())
     val targetTimeZone = TimeZone.getTimeZone(TIMEZONEIDENTIFIER)
     sdf.timeZone = targetTimeZone
     val formattedDateTime = sdf.format(Calendar.getInstance().time)

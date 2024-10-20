@@ -1,11 +1,10 @@
 package com.example.myappcompose.resolve_parking.utils
 
-import com.example.myappcompose.resolve_parking.data.models.QRScannerRequest
 import com.example.myappcompose.resolve_parking.data.models.Ticket
 import com.example.myappcompose.resolve_parking.utils.enums.DurationType
 import com.example.myappcompose.resolve_parking.utils.enums.TicketStatusEnum
 
-object Constants {
+object ResolveParkingConstants {
     var IS_PRODUCTION: Boolean = false
     val CLOVER_APP_ID: String = if (IS_PRODUCTION) "JKYNSY9GMYJYG" else "5C4GBW0D4B58T"
     var TIMEZONEIDENTIFIER: String = "America/Los_Angeles"

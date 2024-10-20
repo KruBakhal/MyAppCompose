@@ -1,14 +1,14 @@
 package com.example.myappcompose.resolve_parking.data.repository
 
 import com.example.myappcompose.resolve_parking.utils.CommonUtil.logRequestBody
-import com.example.myappcompose.resolve_parking.data.api.ApiService
+import com.example.myappcompose.resolve_parking.data.api.ResolveParkingApiService
 import com.example.myappcompose.resolve_parking.data.models.ApiResponse
 import com.example.myappcompose.resolve_parking.data.models.TicketRequest
 import com.example.myappcompose.resolve_parking.data.models.TicketResponse
 import com.example.myappcompose.resolve_parking.utils.CommonUtil
 import retrofit2.HttpException
 
-class TicketRepository(private val apiService: ApiService) {
+class TicketRepository(private val apiService: ResolveParkingApiService) {
     suspend fun createTicket(authToken: String, ticketRequest: TicketRequest): ApiResponse<TicketResponse> {
         return try {
             logRequestBody(ticketRequest)

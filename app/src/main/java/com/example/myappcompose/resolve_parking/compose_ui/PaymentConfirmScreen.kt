@@ -2,6 +2,7 @@ package com.example.myappcompose.resolve_parking.compose_ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -47,16 +48,24 @@ import com.example.myappcompose.resolve_parking.utils.TopBar
 
 @Preview(showBackground = true)
 @Composable
-fun PaymentConfirmScreen() {
+fun PaymentConfirmScreen(function: () -> Unit, function1: () -> Unit) {
     Scaffold(
         modifier = Modifier.background(Color.White), containerColor = Color.White
     ) { contentPadding ->
-        ShowPaymentConfirmScreen(contentPadding.calculateTopPadding(), Modifier)
+        ShowPaymentConfirmScreen(
+            contentPadding.calculateTopPadding(), Modifier,
+            function, function1
+        )
     }
 }
 
 @Composable
-fun ShowPaymentConfirmScreen(contentPadding: Dp, modifier: Modifier) {
+fun ShowPaymentConfirmScreen(
+    contentPadding: Dp,
+    modifier: Modifier,
+    function: () -> Unit,
+    function1: () -> Unit
+) {
     val state = rememberScrollState()
     val model = PassTicketModel(
         "AAA", "none", 23.0, 0.0, 0.0, 0, "1 Hours", false, false, null, false
@@ -71,6 +80,7 @@ fun ShowPaymentConfirmScreen(contentPadding: Dp, modifier: Modifier) {
         ) {
             TopBar(R.string.print_title, false) {
                 //onBackPress
+                function.invoke()
             }
 
             Spacer(modifier = Modifier.height(10.dp))
@@ -171,14 +181,18 @@ fun ShowPaymentConfirmScreen(contentPadding: Dp, modifier: Modifier) {
                         fontSize = TextUnit(18f, TextUnitType.Sp),
                     )
                 }
-                Box(modifier = Modifier.weight(1f)
-                , contentAlignment = Alignment.BottomCenter)
+                Box(
+                    modifier = Modifier.weight(1f), contentAlignment = Alignment.BottomCenter
+                )
                 {
                     Box(
                         modifier = Modifier
                             .size(70.dp)
-                            .background(button_regular, CircleShape)
-                        , contentAlignment = Alignment.Center
+                            .clickable {
+                                function1.invoke()
+                            }
+                            .background(button_regular, CircleShape),
+                        contentAlignment = Alignment.Center
                     ) {
                         Icon(
                             modifier = Modifier.size(60.dp),

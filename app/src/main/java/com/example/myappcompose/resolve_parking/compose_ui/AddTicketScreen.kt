@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -33,10 +32,8 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
@@ -48,7 +45,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -66,6 +62,7 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myappcompose.R
+import com.example.myappcompose.resolve_parking.data.models.PassTicketModel
 import com.example.myappcompose.resolve_parking.theme.button_regular
 import com.example.myappcompose.resolve_parking.theme.control_box_outline
 import com.example.myappcompose.resolve_parking.theme.fontFamily
@@ -75,17 +72,23 @@ import com.example.myappcompose.resolve_parking.utils.TopBar
 
 @Preview(showBackground = true)
 @Composable
-fun AddTicketScreen() {
+fun AddTicketScreen(function: () -> Boolean,submit: (String) -> Unit) {
     Scaffold(
         modifier = Modifier.background(Color.White), containerColor = Color.White
     ) { contentPadding ->
-        ShowAddTicketScreen(contentPadding.calculateTopPadding(), Modifier)
+        ShowAddTicketScreen(contentPadding.
+        calculateTopPadding(), Modifier,function,submit)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ShowAddTicketScreen(contentPadding: Dp, modifier: Modifier) {
+fun ShowAddTicketScreen(
+    contentPadding: Dp,
+    modifier: Modifier,
+    function: () -> Boolean,
+    submit: (String) -> Unit
+) {
     val state = rememberScrollState()
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -98,6 +101,7 @@ fun ShowAddTicketScreen(contentPadding: Dp, modifier: Modifier) {
         ) {
             TopBar(R.string.add_ticket, false) {
                 //onBackPress
+                function.invoke()
             }
 
             Spacer(modifier = Modifier.height(10.dp))
@@ -188,7 +192,19 @@ fun ShowAddTicketScreen(contentPadding: Dp, modifier: Modifier) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(45.dp),
-                    onClick = { /*TODO*/ },
+                    onClick = { /*TODO*/
+
+                        val model= PassTicketModel(
+                            "AAA", "none", 23.0,
+                            0.0, 0.0,
+                            0,
+                            "1 Hours",
+                            false,
+                            false,
+                            null
+                        )
+                        submit.invoke(model.toString())
+                        },
                     colors = ButtonDefaults.buttonColors(containerColor = button_regular)
                 ) {
                     Text(text = stringResource(id = R.string.submit_btn))

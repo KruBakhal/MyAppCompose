@@ -1,16 +1,11 @@
-package com.example.myappcompose.di_module
+package com.example.myappcompose.resolve_parking.data.network
 
-import android.content.Context
-import androidx.room.Room
-import com.example.myappcompose.shopapp.di.network.APINetworkInterface
-import com.example.myappcompose.shopapp.utils.Constants
-import com.example.myappcompose.superball.database.SuperBallAppDatabase
-import com.example.practicesession.superballgame.database.SuperBallDao
+import com.example.myappcompose.resolve_parking.data.api.ResolveParkingApiService
+import com.example.myappcompose.resolve_parking.utils.ResolveParkingConstants
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -22,12 +17,12 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class NetworkModule {
+class ResolveParkingDIModule {
 
     @Provides
     @Singleton
-    @Named("Shop")
-    fun provideRetrofit(): Retrofit {
+    @Named("Resolve")
+    fun provideRetrofitResolve(): Retrofit {
         val okHttpClientForMoreAppsView: OkHttpClient = OkHttpClient.Builder()
             .callTimeout(8, TimeUnit.SECONDS)
             .connectTimeout(8, TimeUnit.SECONDS)
@@ -36,7 +31,7 @@ class NetworkModule {
             .build()
 
         return Retrofit.Builder()
-            .baseUrl(Constants.BASE_URL)
+            .baseUrl(ResolveParkingConstants.BASE_URL)
             .client(provideOkHttpClient(provideLoggingInterceptor()))
             .client(okHttpClientForMoreAppsView)
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
@@ -46,8 +41,8 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideRetrofitService(@Named("Shop") retrofit: Retrofit): APINetworkInterface {
-        return retrofit.create(APINetworkInterface::class.java)
+    fun provideRetrofitServiceResolve( @Named("Resolve") retrofit: Retrofit): ResolveParkingApiService {
+        return retrofit.create(ResolveParkingApiService::class.java)
     }
 
 
@@ -62,19 +57,5 @@ class NetworkModule {
         interceptor.level = HttpLoggingInterceptor.Level.BODY
         return interceptor
     }
-    @Provides
-    @Singleton
-    fun getRoomDatabaseSuper(@ApplicationContext context: Context): SuperBallAppDatabase {
-        return Room.databaseBuilder(
-            context.applicationContext,
-            SuperBallAppDatabase::class.java,
-            "super_db_compose.db").allowMainThreadQueries().fallbackToDestructiveMigration().build()
-    }
 
-
-    @Provides
-    @Singleton
-    fun provideChannelDaoSuper( appDatabase: SuperBallAppDatabase): SuperBallDao {
-        return appDatabase.getArticleDBDao()
-    }
 }

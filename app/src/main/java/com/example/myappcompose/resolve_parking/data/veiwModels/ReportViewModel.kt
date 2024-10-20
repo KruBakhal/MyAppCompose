@@ -1,7 +1,7 @@
 package com.example.myappcompose.resolve_parking.data.veiwModels
 
 import com.example.myappcompose.resolve_parking.utils.CommonUtil.convertTimeStampToDateString
-import com.example.myappcompose.resolve_parking.utils.Constants.DATE_TIME_TIMEZONE_FORMAT
+import com.example.myappcompose.resolve_parking.utils.ResolveParkingConstants.DATE_TIME_TIMEZONE_FORMAT
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

@@ -51,22 +51,19 @@ import androidx.constraintlayout.compose.ConstraintSet
 import com.example.myappcompose.R
 import com.example.myappcompose.resolve_parking.theme.button_regular
 import com.example.myappcompose.resolve_parking.theme.control_box_outline
-import com.example.myappcompose.resolve_parking.theme.button_regular
-import com.example.myappcompose.resolve_parking.theme.control_box_outline
 import com.example.myappcompose.resolve_parking.theme.hint_color
 
-@Preview(showBackground = true)
 @Composable
-fun PinEnterScreen() {
+fun PinEnterScreen(function: () -> Unit) {
     Scaffold(
         modifier = Modifier.background(Color.White), containerColor = Color.White
     ) { contentPadding ->
-        ShowPinScreen(contentPadding.calculateTopPadding(), Modifier)
+        ShowPinScreen(contentPadding.calculateTopPadding(), Modifier,function)
     }
 }
 
 @Composable
-fun ShowPinScreen(contentPadding: Dp, modifier: Modifier) {
+fun ShowPinScreen(contentPadding: Dp, modifier: Modifier, function: () -> Unit) {
     var devieId by remember { mutableStateOf("") }
     var locationId1 by remember { mutableStateOf("") }
     var locationId2 by remember { mutableStateOf("") }
@@ -229,6 +226,8 @@ fun ShowPinScreen(contentPadding: Dp, modifier: Modifier) {
 
                 Button(
                     onClick = {
+
+                        function.invoke()
                         if (locationId1.isNotEmpty() && locationId2.isNotEmpty() && locationId3.isNotEmpty() && locationId4.isNotEmpty() && locationId5.isNotEmpty() && locationId6.isNotEmpty()) {
                             val locationId =
                                 locationId1 + locationId2 + locationId3 + locationId4 + locationId5 + locationId6

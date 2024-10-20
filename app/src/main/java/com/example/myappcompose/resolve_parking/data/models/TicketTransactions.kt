@@ -1,7 +1,7 @@
 package com.example.myappcompose.resolve_parking.data.models
 
 import com.example.myappcompose.resolve_parking.utils.CommonUtil.toDateTimeToInputFormatString
-import com.example.myappcompose.resolve_parking.utils.Constants.DATE_TIME_FORMAT_MMM_DD_YYYY_HH_MM
+import com.example.myappcompose.resolve_parking.utils.ResolveParkingConstants.DATE_TIME_FORMAT_MMM_DD_YYYY_HH_MM
 import com.google.gson.annotations.SerializedName
 import com.example.myappcompose.resolve_parking.utils.enums.TransactionModeEnum
 import java.text.DecimalFormat

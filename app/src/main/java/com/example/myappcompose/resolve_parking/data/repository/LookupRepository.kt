@@ -1,7 +1,7 @@
 package com.example.myappcompose.resolve_parking.data.repository
 
 import android.util.Log
-import com.example.myappcompose.resolve_parking.data.api.ApiService
+import com.example.myappcompose.resolve_parking.data.api.ResolveParkingApiService
 import com.example.myappcompose.resolve_parking.data.models.ApiResponse
 import com.example.myappcompose.resolve_parking.data.models.CrashDataRequestModel
 import com.example.myappcompose.resolve_parking.data.models.DeviceConfigValueResponse
@@ -9,7 +9,7 @@ import com.example.myappcompose.resolve_parking.data.models.PayOnExitResponseMod
 import com.example.myappcompose.resolve_parking.utils.CommonUtil
 import retrofit2.HttpException
 
-class LookupRepository(private val apiService: ApiService) {
+class LookupRepository(private val apiService: ResolveParkingApiService) {
     suspend fun getDeviceConfigValue(authToken: String): ApiResponse<DeviceConfigValueResponse> {
         return try {
             val response = apiService.getDeviceConfigValue( authToken)

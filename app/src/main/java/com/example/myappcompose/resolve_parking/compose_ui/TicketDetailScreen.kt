@@ -62,7 +62,7 @@ import com.example.myappcompose.ui.theme.fontFamily
 
 @Preview(showBackground = true)
 @Composable
-fun TicketDetailScreen() {
+fun TicketDetailScreen(onBackPress: TicketDetailModel, function: () -> Boolean) {
     Scaffold(
         modifier = Modifier.background(Color.White), containerColor = Color.White
     ) { contentPadding ->
