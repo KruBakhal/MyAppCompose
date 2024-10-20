@@ -42,11 +42,7 @@ fun ResolveParkingAppNavHost(
             route = ResolveParkingScreen.PinActivity.route,
             arguments = ResolveParkingScreen.PinActivity.navArguments
         ) {
-            PinEnterScreen {
-                navController.navigate(
-                    ResolveParkingScreen.PinActivity.createPinScreenToStartShift()
-                )
-            }
+            PinEnterScreen()
         }
         composable(
             route = ResolveParkingScreen.StarShift.route,

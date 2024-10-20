@@ -41,22 +41,19 @@ class ShiftRepository @Inject constructor(private val apiService: ResolveParking
 
     suspend fun verifyPin(
         deviceSerialNo: String, clientSecret: String, devicePIN: String
-    ): ApiResponse<VerifyPinResponse> {
+    ): Response<VerifyPinResponse> {
         return try {
             val verifyPinRequest = VerifyPinRequest(devicePIN)
             val response = apiService.verifyPin(deviceSerialNo, clientSecret, verifyPinRequest)
-            ApiResponse(true, response, "")
+            SuccessResponse(response)
         } catch (e: HttpException) {
             // Handle HTTP errors
-            val errorMessage = handleServerErrorResponse(e)
-            ApiResponse(false, null, errorMessage.messages.firstOrNull().toString(), e.code())
+            val model = handleServerErrorResponse(e)
+            ErrorResponse(
+                model.messages.firstOrNull().toString(), e, e.code()
+            )
         } catch (e: HttpException) {
-            // Handle HTTP errors
-            val errorMessage = getErrorMessage(e)
-            ApiResponse(false, null, errorMessage)
-        } catch (e: Exception) {
-            // Handle other exceptions
-            ApiResponse(false, null, "${e.message}")
+            ErrorResponse("", e)
         }
     }
 

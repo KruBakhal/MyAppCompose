@@ -12,6 +12,7 @@ import com.example.myappcompose.resolve_parking.data.models.ApiResponse
 import com.example.myappcompose.resolve_parking.data.models.EndShift
 import com.example.myappcompose.resolve_parking.data.models.ErrorResponse
 import com.example.myappcompose.resolve_parking.data.models.ForceEndShiftRequest
+import com.example.myappcompose.resolve_parking.data.models.Response
 import com.example.myappcompose.resolve_parking.data.models.ShiftResponse
 import com.example.myappcompose.resolve_parking.data.models.ShiftSummary
 import com.example.myappcompose.resolve_parking.data.models.VerifyPinResponse
@@ -21,6 +22,7 @@ import retrofit2.HttpException
 import javax.inject.Inject
 @HiltViewModel
 class ShiftViewModel @Inject constructor(private val shiftRepository: ShiftRepository) : ViewModel() {
+
     private val _startShiftLiveData =
         MutableLiveData<ApiResponse<ShiftResponse>?>()
     val startShiftLiveData: LiveData<ApiResponse<ShiftResponse>?> get() = _startShiftLiveData
@@ -31,9 +33,6 @@ class ShiftViewModel @Inject constructor(private val shiftRepository: ShiftRepos
     private val _shiftSummaryLiveData = MutableLiveData<ApiResponse<ShiftSummary>?>()
     val shiftSummaryLiveData: LiveData<ApiResponse<ShiftSummary>?> get() = _shiftSummaryLiveData
 
-    private val _verifyPinLiveData =
-        MutableLiveData<ApiResponse<VerifyPinResponse>?>()
-    val verifyPinLiveData: LiveData<ApiResponse<VerifyPinResponse>?> get() = _verifyPinLiveData
 
     private val _activeShiftLiveData =
         MutableLiveData<ApiResponse<ActiveShiftResponse>?>()
@@ -42,21 +41,7 @@ class ShiftViewModel @Inject constructor(private val shiftRepository: ShiftRepos
     val showProgressDialog = MutableLiveData(false)
     val ticketClose = MutableLiveData(false)
     val authentication = MutableLiveData(false)
-    fun verifyPin(deviceSerialNo: String, clientSecret: String, devicePIN: String) {
-        viewModelScope.launch {
-            try {
-                val response = shiftRepository.verifyPin(deviceSerialNo, clientSecret, devicePIN)
-                _verifyPinLiveData.value = response
-            } catch (e: HttpException) {
-                // Handle HTTP errors
-                val errorMessage = CommonUtil.getErrorMessage(e)
-                _verifyPinLiveData.value = ApiResponse(false, null, errorMessage)
-            } catch (e: Exception) {
-                // Handle other exceptions
-                _verifyPinLiveData.value = ApiResponse(false, null, "${e.message}")
-            }
-        }
-    }
+
 
     fun getActiveShift(deviceSerialNo: String, clientSecret: String) {
         viewModelScope.launch {

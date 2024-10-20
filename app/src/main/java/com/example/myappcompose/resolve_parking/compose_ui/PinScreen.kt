@@ -1,6 +1,7 @@
 package com.example.myappcompose.resolve_parking.compose_ui
 
 import android.view.KeyEvent
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -14,11 +15,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -30,11 +34,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -48,32 +54,72 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.myappcompose.R
+import com.example.myappcompose.resolve_parking.data.models.ErrorResponse
+import com.example.myappcompose.resolve_parking.data.models.SuccessResponse
+import com.example.myappcompose.resolve_parking.data.veiwModels.LoginViewModel
 import com.example.myappcompose.resolve_parking.theme.button_regular
 import com.example.myappcompose.resolve_parking.theme.control_box_outline
+import com.example.myappcompose.resolve_parking.theme.green_regular
 import com.example.myappcompose.resolve_parking.theme.hint_color
 
+@Preview(showBackground = true)
 @Composable
-fun PinEnterScreen(function: () -> Unit) {
+fun PinEnterScreen() {
     Scaffold(
         modifier = Modifier.background(Color.White), containerColor = Color.White
     ) { contentPadding ->
-        ShowPinScreen(contentPadding.calculateTopPadding(), Modifier,function)
+        val viewModel: LoginViewModel = hiltViewModel()
+        ShowPinScreen(
+            contentPadding
+                .calculateTopPadding(),
+            Modifier, viewModel
+        ) {
+
+        }
     }
 }
 
 @Composable
-fun ShowPinScreen(contentPadding: Dp, modifier: Modifier, function: () -> Unit) {
-    var devieId by remember { mutableStateOf("") }
-    var locationId1 by remember { mutableStateOf("") }
-    var locationId2 by remember { mutableStateOf("") }
-    var locationId3 by remember { mutableStateOf("") }
-    var locationId4 by remember { mutableStateOf("") }
-    var locationId5 by remember { mutableStateOf("") }
-    var locationId6 by remember { mutableStateOf("") }
+fun ShowPinScreen(
+    contentPadding: Dp,
+    modifier: Modifier,
+    viewModel: LoginViewModel,
+    function: () -> Unit
+) {
+    val context = LocalContext.current
+    var deviceId by remember { mutableStateOf("") }
+    val locationId1 by remember { mutableStateOf("") }
+    val locationId2 by remember { mutableStateOf("") }
+    val locationId3 by remember { mutableStateOf("") }
+    val locationId4 by remember { mutableStateOf("") }
+    val locationId5 by remember { mutableStateOf("") }
+    val locationId6 by remember { mutableStateOf("") }
     val focusRequesters = List(6) { FocusRequester() }
-    val locationIds = remember { mutableStateListOf("", "", "", "", "", "") }
+    val locationIds = remember {
+        mutableStateListOf(
+            locationId1,
+            locationId2,
+            locationId3,
+            locationId4,
+            locationId5,
+            locationId6
+        )
+    }
+    when (val response = viewModel.verifyPinLiveData.value) {
+        is ErrorResponse -> {
+            Toast.makeText(context, response.message, Toast.LENGTH_LONG).show()
+        }
 
+        is SuccessResponse -> {
+            function.invoke()
+        }
+
+        else -> {
+
+        }
+    }
     Box(modifier = Modifier.fillMaxHeight()) {
         val constraintSet = ConstraintSet {
             val appLogo = createRefFor("app_logo")
@@ -128,8 +174,8 @@ fun ShowPinScreen(contentPadding: Dp, modifier: Modifier, function: () -> Unit) 
                 Spacer(modifier = Modifier.height(10.dp))
 
                 BasicTextField(
-                    value = devieId,
-                    onValueChange = { devieId = it },
+                    value = deviceId,
+                    onValueChange = { deviceId = it },
                     modifier = modifier
                         .fillMaxWidth()
                         .height(50.dp)
@@ -189,7 +235,9 @@ fun ShowPinScreen(contentPadding: Dp, modifier: Modifier, function: () -> Unit) 
                                 }
                             },
                             modifier = Modifier
-                                .weight(1f).fillMaxHeight().padding(0.dp)
+                                .weight(1f)
+                                .fillMaxHeight()
+                                .padding(0.dp)
                                 .border(2.dp, control_box_outline, RoundedCornerShape(10.dp))
                                 .focusRequester(focusRequesters[i])
                                 .onKeyEvent { keyEvent ->
@@ -212,7 +260,9 @@ fun ShowPinScreen(contentPadding: Dp, modifier: Modifier, function: () -> Unit) 
                             singleLine = true,
                             decorationBox = { innerTextField ->
                                 Row(
-                                    Modifier.fillMaxSize().padding(0.dp, 0.dp, 0.dp, 0.dp),
+                                    Modifier
+                                        .fillMaxSize()
+                                        .padding(0.dp, 0.dp, 0.dp, 0.dp),
                                     horizontalArrangement = Arrangement.Center,
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
@@ -226,14 +276,21 @@ fun ShowPinScreen(contentPadding: Dp, modifier: Modifier, function: () -> Unit) 
 
                 Button(
                     onClick = {
+                        var locationId =""
+                        locationIds.forEach {
+                            locationId+=""+it
+                        }
+                        if (locationId.isNotEmpty()) {
 
-                        function.invoke()
-                        if (locationId1.isNotEmpty() && locationId2.isNotEmpty() && locationId3.isNotEmpty() && locationId4.isNotEmpty() && locationId5.isNotEmpty() && locationId6.isNotEmpty()) {
-                            val locationId =
-                                locationId1 + locationId2 + locationId3 + locationId4 + locationId5 + locationId6
-
+                            viewModel.verifyPin(deviceId, "ccc", locationId)
                         } else {
                             // Handle empty fields here (e.g., show an error message)
+                            Toast.makeText(
+                                context,
+                                context.getString(R.string.enter_device_serial_id),
+                                Toast.LENGTH_LONG
+                            ).show()
+
                         }
                     },
                     colors = ButtonDefaults.buttonColors(button_regular),
@@ -248,5 +305,37 @@ fun ShowPinScreen(contentPadding: Dp, modifier: Modifier, function: () -> Unit) 
                 }
             }
         }
+        if (viewModel.showProgressDialog.value)
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Box(modifier = Modifier) {
+                    Image(
+                        painterResource(id = R.drawable.splash_logo),
+                        contentDescription = "splash",
+                        modifier = Modifier
+                            .size(100.dp)
+                            .shadow(0.dp, CircleShape)
+                            .padding(10.dp)
+                            .align(Alignment.Center)
+                    )
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(120.dp),
+                        color = green_regular,
+                        trackColor = Color.Transparent,
+                        strokeWidth = 10.dp
+                    )
+                }
+                Spacer(modifier = Modifier.height(10.dp))
+                Text(
+                    textAlign = TextAlign.Start,
+                    text = stringResource(R.string.please_wait),
+                    modifier = Modifier,
+                    color = button_regular,
+                    fontSize = TextUnit(20f, TextUnitType.Sp)
+                )
+            }
     }
 }

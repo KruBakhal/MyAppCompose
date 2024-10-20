@@ -23,17 +23,11 @@ class ResolveParkingDIModule {
     @Singleton
     @Named("Resolve")
     fun provideRetrofitResolve(): Retrofit {
-        val okHttpClientForMoreAppsView: OkHttpClient = OkHttpClient.Builder()
-            .callTimeout(8, TimeUnit.SECONDS)
-            .connectTimeout(8, TimeUnit.SECONDS)
-            .readTimeout(50, TimeUnit.SECONDS)
-            .writeTimeout(50, TimeUnit.SECONDS)
-            .build()
+
 
         return Retrofit.Builder()
             .baseUrl(ResolveParkingConstants.BASE_URL)
             .client(provideOkHttpClient(provideLoggingInterceptor()))
-            .client(okHttpClientForMoreAppsView)
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
             .build()
 
@@ -41,7 +35,7 @@ class ResolveParkingDIModule {
 
     @Provides
     @Singleton
-    fun provideRetrofitServiceResolve( @Named("Resolve") retrofit: Retrofit): ResolveParkingApiService {
+    fun provideRetrofitServiceResolve(@Named("Resolve") retrofit: Retrofit): ResolveParkingApiService {
         return retrofit.create(ResolveParkingApiService::class.java)
     }
 
@@ -49,6 +43,10 @@ class ResolveParkingDIModule {
     private fun provideOkHttpClient(interceptor: HttpLoggingInterceptor): OkHttpClient {
         val b = OkHttpClient.Builder()
         b.addInterceptor(interceptor)
+            .callTimeout(8, TimeUnit.SECONDS)
+            .connectTimeout(8, TimeUnit.SECONDS)
+            .readTimeout(50, TimeUnit.SECONDS)
+            .writeTimeout(50, TimeUnit.SECONDS)
         return b.build()
     }
 
